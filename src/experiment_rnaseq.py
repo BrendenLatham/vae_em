@@ -63,7 +63,7 @@ def run_rnaseq(args, paths):
     em_history = train_em(em, train_loader, device,
                           epochs=args.epochs_em, lr=1e-4,
                           langevin_steps=args.langevin_steps,
-                          langevin_lr=0.005, m_steps=1)
+                          langevin_lr=0.005, m_steps=args.m_steps)
     io_utils.save_history_csv(
         em_history, os.path.join(paths['metrics'], 'em_history.csv'))
     io_utils.save_checkpoint(
