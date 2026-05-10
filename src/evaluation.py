@@ -19,8 +19,15 @@ from .langevin import log_joint, langevin_sample
 log = logging.getLogger(__name__)
 
 
-def estimate_marginal_log_likelihood(model, loader, device, K=1000, max_batches=None):
+def estimate_marginal_log_likelihood(model, loader, device, K=1000,
+                                     max_batches=None, k_chunk=500):
     """MC estimate of mean log p(x) via prior importance sampling.
+
+    Chunks the K prior samples into groups of size `k_chunk` so peak GPU
+    memory is proportional to (B * k_chunk * d), not (B * K * d). This is
+    numerically equivalent to the unchunked version: logsumexp is
+    associative, so merging per-chunk logsumexps with torch.logaddexp is
+    exact (no Monte Carlo noise added).
 
     Includes the full Gaussian normalization constant that elbo_loss drops.
     """
@@ -29,21 +36,35 @@ def estimate_marginal_log_likelihood(model, loader, device, K=1000, max_batches=
     log_norm = -0.5 * d * math.log(2.0 * math.pi)
     total_ll = 0.0
     n = 0
+    NEG_INF = float('-inf')
     with torch.no_grad():
         for i, (x, _) in enumerate(tqdm(loader, desc=f'log p(x), K={K}')):
             if max_batches is not None and i >= max_batches:
                 break
             x = x.to(device)
             B = x.size(0)
-            z = torch.randn(B, K, model.latent_dim, device=device).view(B * K, -1)
-            dec_mu, dec_logvar = model.decode(z)
-            dec_mu = dec_mu.view(B, K, d)
-            dec_logvar = dec_logvar.view(B, K, d)
             x_exp = x.unsqueeze(1)  # (B, 1, d)
-            log_pxz = (-0.5 * torch.sum(
-                dec_logvar + (x_exp - dec_mu).pow(2) * (-dec_logvar).exp(), dim=2
-            ) + log_norm)  # (B, K)
-            log_px = torch.logsumexp(log_pxz, dim=1) - math.log(K)
+
+            # Running logsumexp of all log-weights seen so far. Starts at -inf
+            # so logaddexp(-inf, chunk_lse) = chunk_lse on the first chunk.
+            running_lse = torch.full((B,), NEG_INF, device=device)
+
+            remaining = K
+            while remaining > 0:
+                k = min(k_chunk, remaining)
+                z = torch.randn(B, k, model.latent_dim, device=device).view(B * k, -1)
+                dec_mu, dec_logvar = model.decode(z)
+                dec_mu = dec_mu.view(B, k, d)
+                dec_logvar = dec_logvar.view(B, k, d)
+                log_pxz = (-0.5 * torch.sum(
+                    dec_logvar + (x_exp - dec_mu).pow(2) * (-dec_logvar).exp(), dim=2
+                ) + log_norm)  # (B, k)
+                chunk_lse = torch.logsumexp(log_pxz, dim=1)  # (B,)
+                running_lse = torch.logaddexp(running_lse, chunk_lse)
+                del z, dec_mu, dec_logvar, log_pxz, chunk_lse
+                remaining -= k
+
+            log_px = running_lse - math.log(K)
             total_ll += log_px.sum().item()
             n += B
     return total_ll / n
