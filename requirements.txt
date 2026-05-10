@@ -1,0 +1,12 @@
+numpy
+torch
+torchvision
+scikit-learn
+tqdm
+matplotlib
+scipy
+# RNA-seq experiment only:
+scanpy
+igraph
+louvain
+pandas
