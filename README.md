@@ -1,13 +1,8 @@
 # VAE vs. Approximate-EM on MNIST and PBMC 10k
 
-Standalone reorganization of the strict-spec notebook
-`01_vae_em_mnist_strict__1_.ipynb`.
-
 Both experiments train a Gaussian-decoder VAE with per-pixel learned
 variance, then warm-start an approximate-EM model from the trained VAE
-weights and run Langevin E-steps + decoder-only M-steps. The math
-(ELBO, ULA, prior-IS log p(x) with logsumexp + d/2*log(2*pi)) is
-identical to the notebook.
+weights and run Langevin E-steps + decoder-only M-steps.
 
 ## Usage
 
