@@ -84,7 +84,3 @@ src/
 ├── experiment_rnaseq.py      # RNA-seq orchestrator
 └── io_utils.py               # output reset, logging, CSV/JSON/npz/ckpt writers
 ```
-- `compute_ess_and_mse` reports per-pixel MSE using the prior sample
-  with the largest IS weight. This is the same proxy the notebook used;
-  it does not depend on the encoder, so it is comparable across VAE and
-  EM.
