@@ -50,6 +50,9 @@ def _parse_args():
     p.add_argument('--langevin-steps', type=int, default=30,
                    help='Inner-loop Langevin steps in EM E-step (default: 30). '
                         'Also used as the training-cutoff line in the convergence plot.')
+    p.add_argument('--m-steps', type=int, default=3,
+                   help='Number of decoder gradient-descent steps per M-step '
+                        '(default: 3). The assignment spec asks for "several".')
     p.add_argument('--K', type=int, default=1000,
                    help='Number of prior samples for log p(x) and ESS (default: 1000).')
     return p.parse_args()
