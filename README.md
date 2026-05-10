@@ -89,17 +89,6 @@ src/
 ├── experiment_rnaseq.py      # RNA-seq orchestrator
 └── io_utils.py               # output reset, logging, CSV/JSON/npz/ckpt writers
 ```
-
-## Notes on faithfulness to the notebook
-
-- The variance clamp `[LOGVAR_MIN, LOGVAR_MAX] = [-6, 2]` is applied
-  uniformly across train / sample / eval inside `VAE.decode`.
-- The `d/2 * log(2*pi)` Gaussian normalization constant is dropped
-  inside `elbo_loss` (it has no gradient effect) and re-added in
-  `estimate_marginal_log_likelihood`.
-- The EM optimizer is constructed over `model.decoder_parameters()` only
-  and `requires_grad_` is set to False on every encoder parameter, so
-  phi cannot drift even if a future caller flips a flag.
 - `compute_ess_and_mse` reports per-pixel MSE using the prior sample
   with the largest IS weight. This is the same proxy the notebook used;
   it does not depend on the encoder, so it is comparable across VAE and
