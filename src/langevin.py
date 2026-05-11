@@ -30,8 +30,7 @@ def langevin_sample(model, x, z_init, num_steps=50, step_size=0.005, grad_clip=1
 
     Decoder parameters are not differentiated through; we only take d/dz.
     Per-coordinate gradient clamp prevents one bad sample from blowing up
-    the chain. Stationary distribution is biased by O(eps); acceptable for
-    the "approximate" EM the spec asks for.
+    the chain. Stationary distribution is biased by O(eps)
     """
     z = z_init.clone().detach().requires_grad_(True)
     for _ in range(num_steps):
