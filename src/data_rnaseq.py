@@ -48,11 +48,6 @@ def _download_pbmc(h5_path):
 
 def get_rnaseq_loaders(data_dir='./data', batch_size=128, seed=42):
     """Returns (train_loader, test_loader, input_dim).
-
-    Pipeline mirrors the notebook: filter cells/genes, normalize_total to
-    1e4, log1p, take HVGs, then a separate scaled+PCA+neighbors+Louvain
-    pass purely to produce ground-truth-ish cluster labels for visuals.
-    The VAE trains on the unscaled log-normalized HVG matrix.
     """
     try:
         import scanpy as sc
