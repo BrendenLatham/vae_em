@@ -1,0 +1,8 @@
+{
+  "K": 10000,
+  "log_p_x_vae": 963.6238641325688,
+  "log_p_x_em": 966.5099501056109,
+  "delta_em_minus_vae": 2.8860859730421,
+  "recon_pearson_r_vae_single_cell": 0.8854372501373291,
+  "recon_pearson_r_em_single_cell": 0.8819558620452881
+}

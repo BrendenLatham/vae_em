@@ -1,0 +1,92 @@
+2026-05-10 20:13:27 [INFO] main: CLI args: {'mode': 'full', 'output_dir': '/workspace/vae_em/outputs', 'data_dir': '/workspace/vae_em/data', 'seed': 42, 'device': 'cuda', 'epochs_vae': 30, 'epochs_em': 30, 'langevin_steps': 30, 'm_steps': 3, 'K': 10000}
+2026-05-10 20:13:27 [INFO] main: Output directory: /workspace/vae_em/outputs
+2026-05-10 20:13:27 [INFO] main: Data directory:   /workspace/vae_em/data
+2026-05-10 20:13:27 [INFO] main: Modes to run: ['mnist', 'rnaseq']
+2026-05-10 20:13:27 [INFO] main: Device: cuda
+2026-05-10 20:13:30 [INFO] src.experiment_mnist: ============================================================
+2026-05-10 20:13:30 [INFO] src.experiment_mnist: MNIST experiment
+2026-05-10 20:13:30 [INFO] src.experiment_mnist: ============================================================
+2026-05-10 20:13:31 [INFO] src.data_mnist: MNIST: train=10000  test=2000  input_dim=784
+2026-05-10 20:13:31 [INFO] src.training: Training VAE (ELBO)...
+2026-05-10 20:13:32 [INFO] src.training:   ep   1/30 | -ELBO/sample -912.022 | recon -915.100 | KL 3.077
+2026-05-10 20:13:36 [INFO] src.training:   ep   5/30 | -ELBO/sample -1425.691 | recon -1441.722 | KL 16.030
+2026-05-10 20:13:42 [INFO] src.training:   ep  10/30 | -ELBO/sample -1610.131 | recon -1630.217 | KL 20.087
+2026-05-10 20:13:47 [INFO] src.training:   ep  15/30 | -ELBO/sample -1690.041 | recon -1712.258 | KL 22.217
+2026-05-10 20:13:52 [INFO] src.training:   ep  20/30 | -ELBO/sample -1732.374 | recon -1755.888 | KL 23.513
+2026-05-10 20:13:57 [INFO] src.training:   ep  25/30 | -ELBO/sample -1759.482 | recon -1783.749 | KL 24.267
+2026-05-10 20:14:02 [INFO] src.training:   ep  30/30 | -ELBO/sample -1779.285 | recon -1804.058 | KL 24.773
+2026-05-10 20:14:02 [INFO] src.io_utils:   wrote metrics: /workspace/vae_em/outputs/mnist/metrics/vae_history.csv
+2026-05-10 20:14:02 [INFO] src.io_utils:   wrote checkpoint: /workspace/vae_em/outputs/mnist/checkpoints/vae.pt
+2026-05-10 20:14:02 [INFO] src.plotting:   wrote plot: /workspace/vae_em/outputs/mnist/plots/vae_training.png
+2026-05-10 20:14:02 [INFO] src.training: Training Approximate EM (Langevin E-step + decoder M-step)...
+2026-05-10 20:14:13 [INFO] src.training:   ep   1/30 | -log p(x|z)/sample -1806.558
+2026-05-10 20:14:56 [INFO] src.training:   ep   5/30 | -log p(x|z)/sample -1828.986
+2026-05-10 20:15:52 [INFO] src.training:   ep  10/30 | -log p(x|z)/sample -1838.364
+2026-05-10 20:16:50 [INFO] src.training:   ep  15/30 | -log p(x|z)/sample -1845.201
+2026-05-10 20:17:44 [INFO] src.training:   ep  20/30 | -log p(x|z)/sample -1850.012
+2026-05-10 20:18:20 [INFO] src.training:   ep  25/30 | -log p(x|z)/sample -1854.711
+2026-05-10 20:18:52 [INFO] src.training:   ep  30/30 | -log p(x|z)/sample -1858.816
+2026-05-10 20:18:52 [INFO] src.io_utils:   wrote metrics: /workspace/vae_em/outputs/mnist/metrics/em_history.csv
+2026-05-10 20:18:52 [INFO] src.io_utils:   wrote checkpoint: /workspace/vae_em/outputs/mnist/checkpoints/em.pt
+2026-05-10 20:18:52 [INFO] src.plotting:   wrote plot: /workspace/vae_em/outputs/mnist/plots/em_training.png
+2026-05-10 20:18:52 [INFO] src.experiment_mnist: Extracting VAE latents (encoder mean)...
+2026-05-10 20:18:52 [INFO] src.experiment_mnist: Extracting EM latents (Langevin from prior init)...
+2026-05-10 20:18:56 [INFO] src.experiment_mnist: Running t-SNE on both (this can take ~30s)...
+2026-05-10 20:19:03 [INFO] src.io_utils:   wrote latents: /workspace/vae_em/outputs/mnist/metrics/latents.npz
+2026-05-10 20:19:04 [INFO] src.plotting:   wrote plot: /workspace/vae_em/outputs/mnist/plots/tsne_latents.png
+2026-05-10 20:19:04 [INFO] src.experiment_mnist: Estimating log p(x) on test (K=10000)...
+2026-05-10 20:19:13 [INFO] src.experiment_mnist:   VAE: 957.874 nats / image
+2026-05-10 20:19:13 [INFO] src.experiment_mnist:   EM : 975.662 nats / image
+2026-05-10 20:19:13 [INFO] src.experiment_mnist:   Delta (EM - VAE): +17.787
+2026-05-10 20:19:13 [INFO] src.io_utils:   wrote metrics: /workspace/vae_em/outputs/mnist/metrics/log_likelihood.json
+2026-05-10 20:19:13 [INFO] src.experiment_mnist: Generating sample / reconstruction / slerp grid...
+2026-05-10 20:19:13 [INFO] src.plotting:   wrote plot: /workspace/vae_em/outputs/mnist/plots/samples_recon_slerp.png
+2026-05-10 20:19:13 [INFO] src.experiment_mnist: Computing ESS and best-prior MSE (K=10000)...
+2026-05-10 20:19:22 [INFO] src.experiment_mnist:   VAE - MSE: 0.0407, Mean ESS: 1.05 (out of 10000)
+2026-05-10 20:19:22 [INFO] src.experiment_mnist:   EM  - MSE: 0.0445, Mean ESS: 1.07 (out of 10000)
+2026-05-10 20:19:22 [INFO] src.io_utils:   wrote metrics: /workspace/vae_em/outputs/mnist/metrics/ess_mse.json
+2026-05-10 20:19:22 [INFO] src.experiment_mnist: Computing Langevin convergence trace on EM model...
+2026-05-10 20:19:23 [INFO] src.plotting:   wrote plot: /workspace/vae_em/outputs/mnist/plots/langevin_convergence.png
+2026-05-10 20:19:23 [INFO] src.experiment_mnist:   wrote trace: /workspace/vae_em/outputs/mnist/metrics/langevin_trace.npy
+2026-05-10 20:19:23 [INFO] src.experiment_mnist: MNIST experiment complete.
+2026-05-10 20:19:23 [INFO] src.experiment_rnaseq: ============================================================
+2026-05-10 20:19:23 [INFO] src.experiment_rnaseq: RNA-seq experiment (PBMC 10k)
+2026-05-10 20:19:23 [INFO] src.experiment_rnaseq: ============================================================
+2026-05-10 20:19:24 [INFO] src.data_rnaseq: PBMC h5 already present: /workspace/vae_em/data/pbmc_10k_v3_filtered_feature_bc_matrix.h5
+2026-05-10 20:19:26 [INFO] src.data_rnaseq: Preprocessing PBMC 10k...
+2026-05-10 20:20:32 [INFO] src.data_rnaseq: PBMC 10k: 11537 cells, 2320 HVGs, train=9229 test=2308
+2026-05-10 20:20:32 [INFO] src.training: Training VAE (ELBO)...
+2026-05-10 20:20:33 [INFO] src.training:   ep   1/30 | -ELBO/sample -1791.701 | recon -1806.912 | KL 15.211
+2026-05-10 20:20:36 [INFO] src.training:   ep   5/30 | -ELBO/sample -2923.751 | recon -2945.478 | KL 21.727
+2026-05-10 20:20:40 [INFO] src.training:   ep  10/30 | -ELBO/sample -3032.409 | recon -3053.362 | KL 20.954
+2026-05-10 20:20:43 [INFO] src.training:   ep  15/30 | -ELBO/sample -3122.313 | recon -3144.334 | KL 22.021
+2026-05-10 20:20:47 [INFO] src.training:   ep  20/30 | -ELBO/sample -3197.829 | recon -3220.655 | KL 22.826
+2026-05-10 20:20:51 [INFO] src.training:   ep  25/30 | -ELBO/sample -3260.878 | recon -3284.600 | KL 23.721
+2026-05-10 20:20:55 [INFO] src.training:   ep  30/30 | -ELBO/sample -3308.343 | recon -3332.799 | KL 24.456
+2026-05-10 20:20:55 [INFO] src.io_utils:   wrote metrics: /workspace/vae_em/outputs/rnaseq/metrics/vae_history.csv
+2026-05-10 20:20:55 [INFO] src.io_utils:   wrote checkpoint: /workspace/vae_em/outputs/rnaseq/checkpoints/vae.pt
+2026-05-10 20:20:55 [INFO] src.training: Training Approximate EM (Langevin E-step + decoder M-step)...
+2026-05-10 20:21:05 [INFO] src.training:   ep   1/30 | -log p(x|z)/sample -3338.324
+2026-05-10 20:21:44 [INFO] src.training:   ep   5/30 | -log p(x|z)/sample -3409.929
+2026-05-10 20:22:32 [INFO] src.training:   ep  10/30 | -log p(x|z)/sample -3442.353
+2026-05-10 20:23:23 [INFO] src.training:   ep  15/30 | -log p(x|z)/sample -3466.700
+2026-05-10 20:24:15 [INFO] src.training:   ep  20/30 | -log p(x|z)/sample -3488.287
+2026-05-10 20:25:07 [INFO] src.training:   ep  25/30 | -log p(x|z)/sample -3509.085
+2026-05-10 20:26:00 [INFO] src.training:   ep  30/30 | -log p(x|z)/sample -3527.929
+2026-05-10 20:26:00 [INFO] src.io_utils:   wrote metrics: /workspace/vae_em/outputs/rnaseq/metrics/em_history.csv
+2026-05-10 20:26:00 [INFO] src.io_utils:   wrote checkpoint: /workspace/vae_em/outputs/rnaseq/checkpoints/em.pt
+2026-05-10 20:26:01 [INFO] src.plotting:   wrote plot: /workspace/vae_em/outputs/rnaseq/plots/training_curves.png
+2026-05-10 20:26:01 [INFO] src.experiment_rnaseq: Extracting VAE latents (encoder mean)...
+2026-05-10 20:26:01 [INFO] src.experiment_rnaseq: Extracting EM latents (Langevin from prior init)...
+2026-05-10 20:26:09 [INFO] src.experiment_rnaseq: Running t-SNE on both...
+2026-05-10 20:26:17 [INFO] src.experiment_rnaseq:   Pearson r (VAE recon vs true, single cell): 0.885
+2026-05-10 20:26:17 [INFO] src.experiment_rnaseq:   Pearson r (EM  recon vs true, single cell): 0.882
+2026-05-10 20:26:17 [INFO] src.io_utils:   wrote latents: /workspace/vae_em/outputs/rnaseq/metrics/latents.npz
+2026-05-10 20:26:18 [INFO] src.plotting:   wrote plot: /workspace/vae_em/outputs/rnaseq/plots/tsne_and_recon.png
+2026-05-10 20:26:18 [INFO] src.experiment_rnaseq: Estimating log p(x) on test (K=10000)...
+2026-05-10 20:26:42 [INFO] src.experiment_rnaseq:   VAE: 963.624 nats / cell
+2026-05-10 20:26:42 [INFO] src.experiment_rnaseq:   EM : 966.510 nats / cell
+2026-05-10 20:26:42 [INFO] src.experiment_rnaseq:   Delta (EM - VAE): +2.886
+2026-05-10 20:26:42 [INFO] src.io_utils:   wrote metrics: /workspace/vae_em/outputs/rnaseq/metrics/log_likelihood.json
+2026-05-10 20:26:42 [INFO] src.experiment_rnaseq: RNA-seq experiment complete.
+2026-05-10 20:26:42 [INFO] main: All requested experiments complete.
