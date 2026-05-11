@@ -25,6 +25,7 @@ Common flags:
 --epochs-em  INT        # default: 30
 --langevin-steps INT    # default: 30 (E-step inner steps; also the cutoff line in the trace plot)
 --K          INT        # default: 1000  (prior samples for log p(x) + ESS)
+--m-step
 ```
 
 ## Output layout
